@@ -50,11 +50,11 @@ instruccion_asignacion
 	;
 
   op_asignacion
-	:ASIG { printf ("  op_asignacion -> ASIGNACION\n"); }
-	| SUMA_ASIG { printf ("  op_asignacion -> ASIG_SUMA\n"); }
-	| RESTA_ASIG { printf ("  op_asignacion -> ASIG_RESTA_n"); }
-	| MULT_ASIG { printf ("  op_asignacion -> ASIG_MULTn"); }
-	| DIV_ASIG { printf ("  op_asignacion -> ASIG_DIV\n"); }
+	:ASIGNACION { printf ("  op_asignacion -> ASIGNACION\n"); }
+	| ASIG_SUMA { printf ("  op_asignacion -> ASIG_SUMA\n"); }
+	| ASIG_RESTA { printf ("  op_asignacion -> ASIG_RESTA_n"); }
+	| ASIG_MULT { printf ("  op_asignacion -> ASIG_MULTn"); }
+	| ASIG_DIV { printf ("  op_asignacion -> ASIG_DIV\n"); }
 	| ASIG_POT { printf ("  op_asignacion -> ASIG_POT\n"); }
 	| ASIG_RESTO { printf ("  op_asignacion -> ASIG_RESTO\n"); }
  	| ASIG_DESPI { printf ("  op_asignacion -> ASIG_DESPI\n"); }
@@ -63,7 +63,7 @@ instruccion_asignacion
 
 instruccion_devolver
 	: DEVOLVER	';' { printf ("  instruccion_devolver -> DEVOLVER ’;’ \n"); }
-  |  DEVOLVER [ expresion ] ’;’ { printf ("  instruccion_devolver -> DEVOLVER [ expresion ]’;’ \n"); }
+  |  DEVOLVER [ expresion ] ';' { printf ("  instruccion_devolver -> DEVOLVER [ expresion ]’;’ \n"); }
 	;
 
 instruccion_llamada
@@ -90,7 +90,7 @@ casos
   ;
 
 caso
-	: CUANDO entradas ’=>’ bloque_instrucciones	{ printf ("  caso ->CUANDO entradas ’=>’ bloque_instrucciones \n"); }	
+	: CUANDO entradas FLECHA bloque_instrucciones	{ printf ("  caso ->CUANDO entradas ’=>’ bloque_instrucciones \n"); }	
 	;
 
 entradas 
@@ -100,38 +100,38 @@ entradas
 
 entrada
   : expresion { printf(" entrada -> expresion \n"); }
-  | expresion [.. expresion] { printf(" entrada -> expresion ['..'  expresion]\n"); }
+  | expresion DOS_PUNTOS expresion { printf(" entrada -> expresion ['..'  expresion]\n"); }
   | OTRO
   ;
 
 instruccion_bucle
 	:  clausula_iteracion bloque_instrucciones FIN BUCLE { printf(" instruccion_bucle -> clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
-  | [ IDENTIFICADOR ':' ] clausula_iteracion bloque_instrucciones FIN BUCLE	{ printf ("  instruccion_bucle -> [ IDENTIFICADOR ’:’ ] clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
+  | IDENTIFICADOR ':' clausula_iteracion bloque_instrucciones FIN BUCLE	{ printf ("  instruccion_bucle -> [ IDENTIFICADOR ’:’ ] clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
 	;
 
 clausula_iteracion
   :	PARA IDENTIFICADOR EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN expresion  \n"); }
-  | PARA IDENTIFICADOR [ ’:’ especificacion_tipo ] EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN  [ ’:’ especificacion_tipo ]  expresion  \n"); }
-  | REPETIR IDENTIFICADOR EN rango { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango \n"); }
-  | REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango \n"); }
-  | REPETIR IDENTIFICADOR EN rango [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango [ DESCENDENTE ] \n"); }
-  | REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango [ DESCENDENTE ] \n"); }
+  | PARA IDENTIFICADOR ':' especificacion_tipo EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN  [ ’:’ especificacion_tipo ]  expresion  \n"); }
+  | REPETIR IDENTIFICADOR EN RANGO { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango \n"); }
+  | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango \n"); }
+  | REPETIR IDENTIFICADOR EN RANGO [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango [ DESCENDENTE ] \n"); }
+  | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango [ DESCENDENTE ] \n"); }
   | MIENTRAS expresion { printf ("  clausula_iteracion -> MIENTRAS expresion  \n"); }
 	| error ';' {yyerrok;}
 	;
 
 instruccion_interrupcion 
   : SIGUIENTE ';' { printf(" instruccion_interrupcion -> SIGUIENTE ';' \n"); }
-  | SIGUIENTE cuando ';' { printf(" instruccion_interrupcion -> SIGUIENTE cuando ';' \n"); }
+  | SIGUIENTE CUANDO ';' { printf(" instruccion_interrupcion -> SIGUIENTE cuando ';' \n"); }
   | SALIR ';' { printf(" instruccion_interrupcion -> SALIR ';'\n"); }
   | SALIR DE IDENTIFICADOR ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR ';' \n"); }
-  | SALIR cuando ';' { printf(" instruccion_interrupcion -> SALIR cuando ';' \n"); }
-  | SALIR DE IDENTIFICADOR cuando ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR cuando ';' \n"); }
+  | SALIR CUANDO ';' { printf(" instruccion_interrupcion -> SALIR cuando ';' \n"); }
+  | SALIR DE IDENTIFICADOR CUANDO ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR cuando ';' \n"); }
   ;
 
 
 instruccion_lanzamiento_excepcion
-: LANZA nombre ’;’ {printf (" instruccion_lanzamiento_excepcion ->  LANZA nombre\n"); }
+: LANZA nombre ';' {printf (" instruccion_lanzamiento_excepcion ->  LANZA nombre\n"); }
 
 
 instruccion_captura_excepcion
@@ -144,12 +144,12 @@ clausulas
 
 clausulas_excepcion
 	:  clausula_excepcion_general	{ printf ("  clausulas_excepcion -> clausula_excepcion_general\n"); }
-  | [clausula_excepcion_especifica] clausula_excepcion_general	{ printf ("  clausulas_excepcion -> [clausula_excepcion_especifica] clausula_excepcion_general\n"); }
+  |clausula_excepcion_especifica clausula_excepcion_general	{ printf ("  clausulas_excepcion -> [clausula_excepcion_especifica] clausula_excepcion_general\n"); }
 	| error ';' {yyerrok;}
 	;
 
 clausula_excepcion_especifica
-	: EXCEPCION ’(’ nombre ’)’ bloque_instrucciones	{ printf ("  clausula_excepcion -> EXCEPCION ’(’ nombre ’)’ bloque_instrucciones\n"); }
+	: EXCEPCION '(' nombre ')' bloque_instrucciones	{ printf ("  clausula_excepcion -> EXCEPCION ’(’ nombre ’)’ bloque_instrucciones\n"); }
 	;
 
 clausula_excepcion_general 
