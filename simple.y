@@ -22,6 +22,118 @@
 %%
 
 
+/*****************/
+/* instrucciones */
+/*****************/
+
+
+instruccion
+	:';'	{ printf ("  instruccion -> ';'\n"); }
+	|instruccion_asignacion  { printf ("  instruccion -> instruccion_asignacion\n"); }
+	|instruccion_devolver	{ printf ("  instruccion -> instruccion_devolver\n"); }
+	|instruccion_llamada	{ printf ("  instruccion -> instruccion_llamada\n"); }
+	|instruccion_si		{ printf ("  instruccion -> instruccion_si\n"); }
+	|instruccion_casos	{ printf ("  instruccion -> instruccion_casos\n"); }
+	|instruccion_bucle	{ printf ("  instruccion -> instruccion_bucle\n"); }
+	|instruccion_interrupcion	{ printf ("  instruccion -> instruccion_interrupcion\n"); }
+	|instruccion_lanzamiento_excepcion	{ printf ("  instruccion -> instruccion_lanzamiento_excepcion\n"); }
+  |instruccion_captura_excepcion	{ printf ("  instruccion -> instruccion_captura_excepcion\n"); }
+	|error ';' {yyerrok;}
+	;
+
+instruccion_asignacion
+	:objeto op_asignacion expresion ';'	{ printf ("  instruccion_asignacion -> objeto op_asignacion expresion ';'\n"); }
+	;
+
+  op_asignacion
+	:ASIG { printf ("  op_asignacion -> ASIG\n"); }
+	| SUMA_ASIG { printf ("  op_asignacion -> SUMA_ASIG\n"); }
+	| RESTA_ASIG { printf ("  op_asignacion -> RESTA_ASIG\n"); }
+	| MULT_ASIG { printf ("  op_asignacion -> MULT_ASIG\n"); }
+	| DIV_ASIG { printf ("  op_asignacion -> DIV_ASIG\n"); }
+	| POT_ASIG { printf ("  op_asignacion -> POT_ASIG\n"); }
+	| MOD_ASIG { printf ("  op_asignacion -> MOD_ASIG\n"); }
+ 	| DIZQ_ASIG { printf ("  op_asignacion -> DIZQ_ASIG\n"); }
+	| DDER_ASIG { printf ("  op_asignacion -> DDER_ASIG\n"); }
+;
+
+instruccion_devolver
+	: ’devolver’ [ expresion ]? ’;’	{ printf ("  instruccion_devolver -> DEVOLVER expresion ';'\n"); }
+	;
+
+instruccion_llamada
+	: llamada_subprograma ';'	{ printf ("  instruccion_llamada -> llamada_subprograma ';'\n"); }
+	;
+
+llamada_subprograma
+	:nombre '(' ( definicion_parametro )* ')'	{ printf ("  llamada_subprograma -> nombre '(' ( definicion_parametro )* ')'\n"); }
+	;
+
+instruccion_si
+	: ’si’ expresion ’entonces’ [ instruccion ]+ { printf ("  instruccion_si ->’si’ expresion ’entonces’ [ instruccion ]+ \n"); }	
+	| ’si’ expresion ’entonces’ [ instruccion ]+ [ ’sino’ [ instruccion ]+ ]? ’fin’ ’si’	{ printf ("  instruccion_si -> ’si’ expresion ’entonces’ [ instruccion ]+ [ ’sino’ [ instruccion ]+ ]? ’fin’ ’si’ \n"); }
+	;
+
+instruccion_casos
+	: ’casos’ expresion ’es’ [ caso ]+ ’fin’ ’casos’ ';'	{ printf ("  instruccion_casos -> ’casos’ expresion ’es’ [ caso ]+ ’fin’ ’casos’';' \n"); }	
+	;
+
+caso
+	: ’cuando’ entradas ’=>’ [ instruccion ]+	{ printf ("  caso ->’cuando’ entradas ’=>’ [ instruccion ]+ \n"); }	
+	;
+
+entradas 
+	:[ entrada ’:’ ]* entrada{ printf ("  entradas -> [ entrada ’:’ ]* entrada \n"); }
+	;
+
+entrada
+	:expresion [ ’..’ expresion ]? | ’otro’	{ printf ("  entrada -> expresion [ ’..’ expresion ]? | ’otro’\n"); }
+	;
+
+instruccion_bucle
+	: [ IDENTIFICADOR ’:’ ]? clausula_iteracion [ instruccion ]+ ’fin’ ’bucle’	{ printf ("  instruccion_bucle -> [ IDENTIFICADOR ’:’ ]? clausula_iteracion [ instruccion ]+ ’fin’ ’bucle’ \n"); }
+	;
+
+clausula_iteracion
+	’para’ IDENTIFICADOR [ ’:’ especificacion_tipo ]? ’en’ expresion { printf ("  clausula_iteracion -> ’para’ IDENTIFICADOR [ ’:’ especificacion_tipo ]? ’en’ expresion  \n"); }
+  | ’repetir’ IDENTIFICADOR [ ’:’ especificacion_tipo ]?’en’ rango [ ’descendente’ ]? { printf ("  clausula_iteracion ->’repetir’ IDENTIFICADOR [ ’:’ especificacion_tipo ]?’en’ rango [ ’descendente’ ]? \n"); }
+  | ’mientras’ expresion { printf ("  clausula_iteracion -> mientras’ expresion  \n"); }
+	|error ';' {yyerrok;}
+	;
+
+instruccion_interrupcion
+	:’siguiente’ [ cuando ]? ’;’| ’salir’ [ ’de’ IDENTIFICADOR ]? [ cuando ]? ’;’{ printf ("  instruccion_interrupcion -> ’siguiente’ [ cuando ]? ’;’| ’salir’ [ ’de’ IDENTIFICADOR ]? [ cuando ]?  \n"); }
+	;
+
+instruccion_lanzamiento_excepcion
+: ’lanza’ nombre ’;’ {printf (" instruccion_lanzamiento_excepcion ->  ’lanza’ nombre\n"); }
+
+
+instruccion_captura_excepcion
+: ’prueba’ [ instruccion ]+ clausulas ’fin’ ’prueba’  {printf (" instruccion_captura_excepcion ->  ’prueba’ [ instruccion ]+ clausulas ’fin’ ’prueba’\n"); }
+
+clausulas
+:clausulas_excepcion [ clausula_finalmente ]? {printf (" clausulas ->  clausulas_excepcion [ clausula_finalmente ]?\n"); }
+| clausula_finalmente {printf (" clausulas ->  clausula_finalmente\n"); }
+
+clausulas_excepcion
+	:[ clausula_excepcion_especifica ]* clausula_excepcion_general	{ printf ("  clausulas_excepcion ->[ clausula_excepcion_especifica ]* clausula_excepcion_general\n"); }
+	|error ';' {yyerrok;}
+	;
+
+clausula_excepcion_especifica
+	:’excepcion’ ’(’ nombre ’)’ [ instruccion ]+	{ printf ("  clausula_excepcion -> ’excepcion’ ’(’ nombre ’)’ [ instruccion ]+\n"); }
+	;
+
+clausula_excepcion_general 
+: ’excepcion’ [ instruccion ]+ { printf ("  clausula_excepcion -> ’excepcion’ [ instruccion ]+\n"); }
+
+clausula_finalmente
+: ’finalmente’ [ instruccion ]+ {printf (" clausula_finalmente ->  ’finalmente’ [ instruccion ]+"); }
+
+
+
+
 %%
 
 int yyerror(char *s) {

@@ -27,7 +27,17 @@ LINEA   \n
 {CONSTANTE_ENTERA}       printf("linea %d, ctc entera: %s\n", linea,yytext);
 {CONSTANTE_REAL}         printf("linea %d, ctc real: %s\n", linea,yytext);
 {DELIMITADOR}            printf("linea %d, delimitador: %s\n", linea,yytext);
-{OPERADOR}               printf("linea %d, operador: %s\n", linea,yytext);
+
+":="                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG); }
+":+"                       { printf("linea %d, operador %s\n", linea, yytext); return (SUM_ASIG); }
+":-"                       { printf("linea %d, operador %s\n", linea, yytext); return (RES_ASIG); }
+":/"                       { printf("linea %d, operador %s\n", linea, yytext); return (DIV_ASIG); }
+":\\"                       { printf("linea %d, operador %s\n", linea, yytext); return (MOD_ASIG); }
+":^"                       { printf("linea %d, operador %s\n", linea, yytext); return (POT_ASIG); }
+":<"                       { printf("linea %d, operador %s\n", linea, yytext); return (DIZQ_ASIG); }
+":>"                       { printf("linea %d, operador %s\n", linea, yytext); return (DDER_ASIG); }
+
+
 {CARACTER}               printf("linea %d, caracter: %s\n", linea,yytext);
 {CADENA}                 printf("linea %d, cadena: %s\n", linea,yytext);
 {COMENTARIO}             ;
