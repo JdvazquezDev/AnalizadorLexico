@@ -28,14 +28,14 @@ LINEA   \n
 {CONSTANTE_REAL}         printf("linea %d, ctc real: %s\n", linea,yytext);
 {DELIMITADOR}            printf("linea %d, delimitador: %s\n", linea,yytext);
 
-":="                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG); }
-":+"                       { printf("linea %d, operador %s\n", linea, yytext); return (SUM_ASIG); }
-":-"                       { printf("linea %d, operador %s\n", linea, yytext); return (RES_ASIG); }
-":/"                       { printf("linea %d, operador %s\n", linea, yytext); return (DIV_ASIG); }
-":\\"                       { printf("linea %d, operador %s\n", linea, yytext); return (MOD_ASIG); }
-":^"                       { printf("linea %d, operador %s\n", linea, yytext); return (POT_ASIG); }
-":<"                       { printf("linea %d, operador %s\n", linea, yytext); return (DIZQ_ASIG); }
-":>"                       { printf("linea %d, operador %s\n", linea, yytext); return (DDER_ASIG); }
+":="                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIGNACION); }
+":+"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_SUMA); }
+":-"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_RESTA); }
+":/"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_DIV); }
+":\\"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_RESTO); }
+":^"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_POT); }
+":<"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_DESPI); }
+":>"                       { printf("linea %d, operador %s\n", linea, yytext); return (ASIG_DESPI); }
 
 
 {CARACTER}               printf("linea %d, caracter: %s\n", linea,yytext);

@@ -46,15 +46,15 @@ instruccion_asignacion
 	;
 
   op_asignacion
-	:ASIG { printf ("  op_asignacion -> ASIG\n"); }
-	| SUMA_ASIG { printf ("  op_asignacion -> SUMA_ASIG\n"); }
-	| RESTA_ASIG { printf ("  op_asignacion -> RESTA_ASIG\n"); }
-	| MULT_ASIG { printf ("  op_asignacion -> MULT_ASIG\n"); }
-	| DIV_ASIG { printf ("  op_asignacion -> DIV_ASIG\n"); }
-	| POT_ASIG { printf ("  op_asignacion -> POT_ASIG\n"); }
-	| MOD_ASIG { printf ("  op_asignacion -> MOD_ASIG\n"); }
- 	| DIZQ_ASIG { printf ("  op_asignacion -> DIZQ_ASIG\n"); }
-	| DDER_ASIG { printf ("  op_asignacion -> DDER_ASIG\n"); }
+	:ASIG { printf ("  op_asignacion -> ASIGNACION\n"); }
+	| SUMA_ASIG { printf ("  op_asignacion -> ASIG_SUMA\n"); }
+	| RESTA_ASIG { printf ("  op_asignacion -> ASIG_RESTA_n"); }
+	| MULT_ASIG { printf ("  op_asignacion -> ASIG_MULTn"); }
+	| DIV_ASIG { printf ("  op_asignacion -> ASIG_DIV\n"); }
+	| ASIG_POT { printf ("  op_asignacion -> ASIG_POT\n"); }
+	| ASIG_RESTO { printf ("  op_asignacion -> ASIG_RESTO\n"); }
+ 	| ASIG_DESPI { printf ("  op_asignacion -> ASIG_DESPI\n"); }
+	| ASIG_DESPD { printf ("  op_asignacion -> ASIG_DESPD\n"); }
 ;
 
 instruccion_devolver
