@@ -20,11 +20,52 @@
 %token ASIG_MULT ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESPD
 
 %%
+/**************************************SUBPROGRAMAS***************************************/
+declaracion_subprograma
+ : SUBPROGAMA cabecera_subprograma cuerpo_subprograma SUBPROGAMA { printf(" declaracion_subprograma -> SUBPROGAMA cabecera_subprograma cuerpo_subprograma SUBPROGAMA\n ");}
 
 
-/*****************/
-/* instrucciones */
-/*****************/
+cabecera_subprograma 
+ : IDENTIFICADOR {printf(" cabecera_subprograma ->  IDENTIFICADOR \n");}
+ | IDENTIFICADOR [ parametrizacion ]  {printf(" cabecera_subprograma ->  IDENTIFICADOR [ parametrizacion ] \n");}
+ | IDENTIFICADOR [ tipo_resultado ]  {printf(" cabecera_subprograma ->  IDENTIFICADOR [ tipo_resultado ] \n");}
+ | IDENTIFICADOR [ parametrizacion ] [ tipo_resultado ]  {printf(" cabecera_subprograma ->  IDENTIFICADOR [ parametrizacion ] [ tipo_resultado ] \n");}
+
+parametrizacion 
+ : '(' declaracion_parametros ')' {printf(" parametrizacion -> '(' declaracion_parametros')' \n");}
+ | '(' [ declaracion_parametros ';' ] declaracion_parametros ')' {printf(" parametrizacion -> '(' [ declaracion_parametros ';'] declaracion_parametros')' \n");}
+
+
+
+declaracion_parametros
+ : identificadores ':' especificacion_tipo  { printf(" declaracion_parametros -> identificadores ':' especificacion_tipo \n"); }
+ | identificadores ':' modo especificacion_tipo { printf(" declaracion_parametros -> identificadores ':' modo especificacion_tipo \n"); } 
+ | identificadores ':' especificacion_tipo ASIGNACION expresion { printf(" declaracion_parametros -> identificadores ':' especificacion_tipo ASIGNACION expresion  \n"); }
+ | identificadores ':' modo especificacion_tipo ASIGNACION expresion { printf(" declaracion_parametros -> identificadores ':' modo especificacion_tipo ASIGNACION expresion \n"); }
+ ;
+
+
+identificadores
+ : IDENTIFICADOR { printf(" identificadores -> IDENTIFICADOR \n"); }
+ | identificadores ',' IDENTIFICADOR { printf(" identificadores -> identificadores ',' IDENTIFICADOR \n"); }
+ ;
+
+modo 
+ : VALOR {printf (" modo -> VALOR \n");}
+ | REFERENCIA {printf (" modo -> REFERENCIA \n");}
+ ;
+
+tipo_resultado 
+ : DEVOLVER especificacion_tipo {printf (" tipo_resultado -> DEVOLVER especificacion_tipo \n");}
+ ;
+
+cuerpo_subprograma
+ : PRINCIPIO bloque_instrucciones FIN {printf (" cuerpo_subprograma -> PRINCIPIO bloque_instrucciones FIN \n");}
+ | [ declaraciones ] PRINCIPIO bloque_instrucciones FIN {printf (" cuerpo_subprograma -> [ declaraciones ] PRINCIPIO bloque_instrucciones FIN \n");}
+ ;
+
+
+/*************************************INSTRUCCIONES**************************************/
 
 bloque_instrucciones
 : instruccion { printf(" bloques_instrucciones -> instruccion\n"); }
@@ -32,17 +73,17 @@ bloque_instrucciones
 ;
 
 instruccion
-	:';'	{ printf ("  instruccion -> ';'\n"); }
-	|instruccion_asignacion  { printf ("  instruccion -> instruccion_asignacion\n"); }
-	|instruccion_devolver	{ printf ("  instruccion -> instruccion_devolver\n"); }
-	|instruccion_llamada	{ printf ("  instruccion -> instruccion_llamada\n"); }
-	|instruccion_si		{ printf ("  instruccion -> instruccion_si\n"); }
-	|instruccion_casos	{ printf ("  instruccion -> instruccion_casos\n"); }
-	|instruccion_bucle	{ printf ("  instruccion -> instruccion_bucle\n"); }
-	|instruccion_interrupcion	{ printf ("  instruccion -> instruccion_interrupcion\n"); }
-	|instruccion_lanzamiento_excepcion	{ printf ("  instruccion -> instruccion_lanzamiento_excepcion\n"); }
-  |instruccion_captura_excepcion	{ printf ("  instruccion -> instruccion_captura_excepcion\n"); }
-	|error ';' {yyerrok;}
+ : ';'	{ printf ("  instruccion -> ';'\n"); }
+ | instruccion_asignacion  { printf ("  instruccion -> instruccion_asignacion\n"); }
+ | instruccion_devolver	{ printf ("  instruccion -> instruccion_devolver\n"); }
+ | instruccion_llamada	{ printf ("  instruccion -> instruccion_llamada\n"); }
+ | instruccion_si		{ printf ("  instruccion -> instruccion_si\n"); }
+ | instruccion_casos	{ printf ("  instruccion -> instruccion_casos\n"); }
+ | instruccion_bucle	{ printf ("  instruccion -> instruccion_bucle\n"); }
+ | instruccion_interrupcion	{ printf ("  instruccion -> instruccion_interrupcion\n"); }
+ | instruccion_lanzamiento_excepcion	{ printf ("  instruccion -> instruccion_lanzamiento_excepcion\n"); }
+ | instruccion_captura_excepcion	{ printf ("  instruccion -> instruccion_captura_excepcion\n"); }
+ | error ';' {yyerrok;}
 	;
 
 instruccion_asignacion
@@ -50,114 +91,111 @@ instruccion_asignacion
 	;
 
   op_asignacion
-	:ASIGNACION { printf ("  op_asignacion -> ASIGNACION\n"); }
-	| ASIG_SUMA { printf ("  op_asignacion -> ASIG_SUMA\n"); }
-	| ASIG_RESTA { printf ("  op_asignacion -> ASIG_RESTA_n"); }
-	| ASIG_MULT { printf ("  op_asignacion -> ASIG_MULTn"); }
-	| ASIG_DIV { printf ("  op_asignacion -> ASIG_DIV\n"); }
-	| ASIG_POT { printf ("  op_asignacion -> ASIG_POT\n"); }
-	| ASIG_RESTO { printf ("  op_asignacion -> ASIG_RESTO\n"); }
- 	| ASIG_DESPI { printf ("  op_asignacion -> ASIG_DESPI\n"); }
-	| ASIG_DESPD { printf ("  op_asignacion -> ASIG_DESPD\n"); }
-;
+ : ASIGNACION { printf ("  op_asignacion -> ASIGNACION\n"); }
+ | ASIG_SUMA { printf ("  op_asignacion -> ASIG_SUMA\n"); }
+ | ASIG_RESTA { printf ("  op_asignacion -> ASIG_RESTA_n"); }
+ | ASIG_MULT { printf ("  op_asignacion -> ASIG_MULTn"); }
+ | ASIG_DIV { printf ("  op_asignacion -> ASIG_DIV\n"); }
+ | ASIG_POT { printf ("  op_asignacion -> ASIG_POT\n"); }
+ | ASIG_RESTO { printf ("  op_asignacion -> ASIG_RESTO\n"); }
+ | ASIG_DESPI { printf ("  op_asignacion -> ASIG_DESPI\n"); }
+ | ASIG_DESPD { printf ("  op_asignacion -> ASIG_DESPD\n"); }
+ ;
 
 instruccion_devolver
-	: DEVOLVER	';' { printf ("  instruccion_devolver -> DEVOLVER ’;’ \n"); }
-  |  DEVOLVER [ expresion ] ';' { printf ("  instruccion_devolver -> DEVOLVER [ expresion ]’;’ \n"); }
-	;
+ : DEVOLVER	';' { printf ("  instruccion_devolver -> DEVOLVER ’;’ \n"); }
+ | DEVOLVER [ expresion ] ’;’ { printf ("  instruccion_devolver -> DEVOLVER [ expresion ] ';' \n"); }
+ ;
 
 instruccion_llamada
-	: llamada_subprograma ';'	{ printf ("  instruccion_llamada -> llamada_subprograma\n"); }
-	;
+ : llamada_subprograma ';'	{ printf ("  instruccion_llamada -> llamada_subprograma\n"); }
+ ;
 
 llamada_subprograma
-  : nombre '(' ')' { printf(" llamada_subprograma -> nombre '('  ')' \n"); }
-  | nombre '(' definicion_parametros ')' { printf(" llamada_subprograma -> nombre '(' definicion_parametros ')' \n"); }
-  ;
+ : nombre '(' ')' { printf(" llamada_subprograma -> nombre '('  ')' \n"); }
+ | nombre '(' definicion_parametros ')' { printf(" llamada_subprograma -> nombre '(' definicion_parametros ')' \n"); }
+ ;
 
 instruccion_si 
-  : SI expresion ENTONCES bloque_instrucciones FIN SI { printf(" instruccion_si -> SI expresion ENTONCES bloque_instrucciones FIN SI \n"); }
-  | SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones FIN SI { printf(" instruccion_si ->  SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones FIN SI \n"); }
-  ;
+ : SI expresion ENTONCES bloque_instrucciones FIN SI { printf(" instruccion_si -> SI expresion ENTONCES bloque_instrucciones FIN SI \n"); }
+ | SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones FIN SI { printf(" instruccion_si ->  SI expresion ENTONCES bloque_instrucciones SINO bloque_instrucciones FIN SI \n"); }
+ ;
 
 instruccion_casos
-	: CASOS expresion ES casos FIN CASOS ';'	{ printf ("  instruccion_casos -> CASOS expresion ES casos + FIN CASOS';' \n"); }	
-	;
+ : CASOS expresion ES casos FIN CASOS ';'	{ printf ("  instruccion_casos -> CASOS expresion ES casos + FIN CASOS';' \n"); }	
+ ;
 
 casos
-  : caso { printf(" casos -> caso \n"); }
-  | casos caso { printf(" casos -> casos caso \n"); }
-  ;
+ : caso { printf(" casos -> caso \n"); }
+ | casos caso { printf(" casos -> casos caso \n"); }
+ ;
 
 caso
-	: CUANDO entradas FLECHA bloque_instrucciones	{ printf ("  caso ->CUANDO entradas ’=>’ bloque_instrucciones \n"); }	
-	;
+ : CUANDO entradas FLECHA bloque_instrucciones	{ printf ("  caso ->CUANDO entradas ’=>’ bloque_instrucciones \n"); }	
+ ;
 
 entradas 
-  : entrada { printf(" entradas -> entrada \n"); }
-  | entradas ':' entrada { printf(" entradas -> entradas ':' entrada \n"); }
-  ;
+ : entrada { printf(" entradas -> entrada \n"); }
+ | entradas ':' entrada { printf(" entradas -> entradas ':' entrada \n"); }
+ ;
 
 entrada
-  : expresion { printf(" entrada -> expresion \n"); }
-  | expresion DOS_PUNTOS expresion { printf(" entrada -> expresion ['..'  expresion]\n"); }
-  | OTRO
-  ;
+ : expresion { printf(" entrada -> expresion \n"); }
+ | expresion DOS_PUNTOS expresion { printf(" entrada -> expresion ['..'  expresion]\n"); }
+ | OTRO
+ ;
 
 instruccion_bucle
-	:  clausula_iteracion bloque_instrucciones FIN BUCLE { printf(" instruccion_bucle -> clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
-  | IDENTIFICADOR ':' clausula_iteracion bloque_instrucciones FIN BUCLE	{ printf ("  instruccion_bucle -> [ IDENTIFICADOR ’:’ ] clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
-	;
+ : clausula_iteracion bloque_instrucciones FIN BUCLE { printf(" instruccion_bucle -> clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
+ | IDENTIFICADOR ':' clausula_iteracion bloque_instrucciones FIN BUCLE	{ printf ("  instruccion_bucle -> [ IDENTIFICADOR ’:’ ] clausula_iteracion bloque_instrucciones FIN BUCLE \n"); }
+ ;
 
 clausula_iteracion
-  :	PARA IDENTIFICADOR EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN expresion  \n"); }
-  | PARA IDENTIFICADOR ':' especificacion_tipo EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN  [ ’:’ especificacion_tipo ]  expresion  \n"); }
-  | REPETIR IDENTIFICADOR EN RANGO { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango \n"); }
-  | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango \n"); }
-  | REPETIR IDENTIFICADOR EN RANGO [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango [ DESCENDENTE ] \n"); }
-  | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango [ DESCENDENTE ] \n"); }
-  | MIENTRAS expresion { printf ("  clausula_iteracion -> MIENTRAS expresion  \n"); }
-	| error ';' {yyerrok;}
-	;
+ :	PARA IDENTIFICADOR EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN expresion  \n"); }
+ | PARA IDENTIFICADOR ':' especificacion_tipo EN expresion { printf ("  clausula_iteracion -> PARA IDENTIFICADOR EN  [ ’:’ especificacion_tipo ]  expresion  \n"); }
+ | REPETIR IDENTIFICADOR EN RANGO { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango \n"); }
+ | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango \n"); }
+ | REPETIR IDENTIFICADOR EN RANGO [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR EN rango [ DESCENDENTE ] \n"); }
+ | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO [ DESCENDENTE ] { printf ("  clausula_iteracion ->REPETIR IDENTIFICADOR [ ’:’ especificacion_tipo ] EN rango [ DESCENDENTE ] \n"); }
+ | MIENTRAS expresion { printf ("  clausula_iteracion -> MIENTRAS expresion  \n"); }
+ | error ';' {yyerrok;}
+ ;
 
 instruccion_interrupcion 
-  : SIGUIENTE ';' { printf(" instruccion_interrupcion -> SIGUIENTE ';' \n"); }
-  | SIGUIENTE CUANDO ';' { printf(" instruccion_interrupcion -> SIGUIENTE cuando ';' \n"); }
-  | SALIR ';' { printf(" instruccion_interrupcion -> SALIR ';'\n"); }
-  | SALIR DE IDENTIFICADOR ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR ';' \n"); }
-  | SALIR CUANDO ';' { printf(" instruccion_interrupcion -> SALIR cuando ';' \n"); }
-  | SALIR DE IDENTIFICADOR CUANDO ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR cuando ';' \n"); }
-  ;
-
+ : SIGUIENTE ';' { printf(" instruccion_interrupcion -> SIGUIENTE ';' \n"); }
+ | SIGUIENTE CUANDO ';' { printf(" instruccion_interrupcion -> SIGUIENTE cuando ';' \n"); }
+ | SALIR ';' { printf(" instruccion_interrupcion -> SALIR ';'\n"); }
+ | SALIR DE IDENTIFICADOR ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR ';' \n"); }
+ | SALIR CUANDO ';' { printf(" instruccion_interrupcion -> SALIR cuando ';' \n"); }
+ | SALIR DE IDENTIFICADOR CUANDO ';' { printf(" instruccion_interrupcion -> SALIR DE IDENTIFICADOR cuando ';' \n"); }
+ ;
 
 instruccion_lanzamiento_excepcion
-: LANZA nombre ';' {printf (" instruccion_lanzamiento_excepcion ->  LANZA nombre\n"); }
-
+ : LANZA nombre ';' {printf (" instruccion_lanzamiento_excepcion ->  LANZA nombre\n"); }
 
 instruccion_captura_excepcion
-: PRUEBA bloque_instrucciones clausulas FIN PRUEBA  {printf (" instruccion_captura_excepcion ->  PRUEBA bloque_instrucciones clausulas FIN PRUEBA\n"); }
+ : PRUEBA bloque_instrucciones clausulas FIN PRUEBA  {printf (" instruccion_captura_excepcion ->  PRUEBA bloque_instrucciones clausulas FIN PRUEBA\n"); }
 
 clausulas
-  : clausulas_excepcion {printf (" clausulas -> clausulas_excepcion \n"); }
-  | clausulas [ clausula_finalmente ] {printf (" clausulas -> clausulas_excepcion \n"); }
-  | clausula_finalmente {printf (" clausulas ->  clausula_finalmente\n"); }
+ : clausulas_excepcion {printf (" clausulas -> clausulas_excepcion \n"); }
+ | clausulas [ clausula_finalmente ] {printf (" clausulas -> clausulas_excepcion \n"); }
+ | clausula_finalmente {printf (" clausulas ->  clausula_finalmente\n"); }
 
 clausulas_excepcion
-	:  clausula_excepcion_general	{ printf ("  clausulas_excepcion -> clausula_excepcion_general\n"); }
-  |clausula_excepcion_especifica clausula_excepcion_general	{ printf ("  clausulas_excepcion -> [clausula_excepcion_especifica] clausula_excepcion_general\n"); }
-	| error ';' {yyerrok;}
-	;
+ : clausula_excepcion_general	{ printf ("  clausulas_excepcion -> clausula_excepcion_general\n"); }
+ |clausula_excepcion_especifica clausula_excepcion_general	{ printf ("  clausulas_excepcion -> [clausula_excepcion_especifica] clausula_excepcion_general\n"); }
+ | error ';' {yyerrok;}
+ ;
 
 clausula_excepcion_especifica
-	: EXCEPCION '(' nombre ')' bloque_instrucciones	{ printf ("  clausula_excepcion -> EXCEPCION ’(’ nombre ’)’ bloque_instrucciones\n"); }
-	;
+ : EXCEPCION '(' nombre ')' bloque_instrucciones	{ printf ("  clausula_excepcion -> EXCEPCION ’(’ nombre ’)’ bloque_instrucciones\n"); }
+ ;
 
 clausula_excepcion_general 
-: EXCEPCION bloque_instrucciones { printf ("  clausula_excepcion -> EXCEPCION bloque_instrucciones\n"); }
+ : EXCEPCION bloque_instrucciones { printf ("  clausula_excepcion -> EXCEPCION bloque_instrucciones\n"); }
 
 clausula_finalmente
-: FINALMENTE bloque_instrucciones {printf (" clausula_finalmente ->  FINALMENTE bloque_instrucciones"); }
-
+ : FINALMENTE bloque_instrucciones {printf (" clausula_finalmente ->  FINALMENTE bloque_instrucciones"); }
 
 
 %%
