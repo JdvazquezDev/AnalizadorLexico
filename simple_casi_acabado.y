@@ -514,12 +514,11 @@ expresion_unaria
 
 primario
  : literal  {printf("primario -> literal\n");}
- | objeto  {printf("primario -> objeto\n");}
+ | objeto  {printf("primario -> OBJETO\n");}
  | OBJETO llamada_subprograma {printf("primario -> OBJETO llamada_subprograma\n");}
  | llamada_subprograma  {printf("primario -> llamada_subprograma\n");}
  | enumeraciones  {printf("primario -> enumeraciones\n");}
  | '(' expresion ')' {printf("primario -> '(' expresion ')'\n");}
- | error ';' {yyerrok;}
  ;
 
 literal
